@@ -9,11 +9,7 @@ $kids = $_POST['kids'];
 
 $hotelsResults =$conn->query("
   SELECT
-    hotels.hotel_id,
-    hotels.name,
-    hotels.location,
-    hotels.description,
-    hotels.imagepath
+  hotels.*
   FROM hotels
   JOIN rooms ON hotels.hotel_id = rooms.hotel_id
   LEFT JOIN reservations ON rooms.room_id = reservations.room_id
@@ -38,7 +34,8 @@ if ($hotelsResults->num_rows > 0) {
       'name' => $hotelResult['name'],
       'location' => $hotelResult['location'],
       'description' => $hotelResult['description'],
-      'image' => $hotelResult['imagepath']
+      'image' => $hotelResult['imagepath'],
+      'pret' => $hotelResult['pret']
     ];
   }
 }

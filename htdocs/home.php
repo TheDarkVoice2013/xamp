@@ -398,7 +398,7 @@ include "db_conn.php";
                     </div>
                     <button id="searchBtn" class="btn btn-primary">Search Hotels</button>
                </div>
-                <div id="hotels-list">
+                <div id="hotels-list" class="hotels-grid">
 
                 </div>
             </div>
@@ -577,28 +577,97 @@ include "db_conn.php";
   box-shadow: 0 0 5px rgba(78, 115, 223, 0.5);
 }
 
+.hotels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+/* General card styles */
 .hotel-card {
   border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   perspective: 100px;
-  background-color: #f2f2f2;
-  border-radius:5px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
-.hotel-card img {
-  transform: translateY(-5px);
+.hotel-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* Image styles */
 .hotel-card img {
-  width: 300px;
-  height: 200px;
+  width: 100%;
+  margin: auto;
+  height: auto;
   display: block;
-  margin: 0 auto;
   border: 1px solid #ccc;
-  border-radius:5px;
+  border-radius: 10px;
+  transition: transform 0.3s;
 }
+
+.hotel-card img:hover {
+  transform: scale(1.05);
+}
+
+
+
+/* Info section styles */
+.hotel-info {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.hotel-info h3 {
+  font-size: 1.5em;
+  color: #333;
+  margin: 10px 0;
+}
+
+.hotel-info p {
+  font-size: 1em;
+  color: #666;
+  margin: 5px 0;
+}
+
+.hotel-info .location {
+  font-size: 0.9em;
+  color: #999;
+  display: block;
+  margin-top: 10px;
+}
+
+/* Price styles */
+.hotel-info .price {
+  font-size: 1.2em;
+  color: #e74c3c;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+@keyframes hoverEffect {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.hotel-card:hover {
+  animation: hoverEffect 0.6s ease-in-out forwards;
+}
+
 
 .hotel-info {
   margin-top: 10px;
@@ -727,18 +796,20 @@ var formattedEndDate = formatDate(endDate);
         console.log(response)
         if (hotelsData.length > 0) {
           $('#hotels-list').empty();
-
+            
           for (hotel of hotelsData) {
             var imageURL = hotel.image;
             var description = hotel.description;
             var location = hotel.location;
             var hotelName = hotel.name;
+            var price = hotel.pret;
             
             var hotelCard = '<div class="hotel-card" onclick="showHotelPage(' + hotel.hotel_id + ')">';
               hotelCard += '<img src="' + imageURL + '" alt="Hotel Image">';
               hotelCard += '<div class="hotel-info">';
                 hotelCard += '<h3>' + hotelName + '</h3>';
                 hotelCard += '<p>' + description + '</p>';
+                hotelCard += '<p>PRICE: ' + price + ' EUR</p>';
                 hotelCard += '<span class="location">' + location + '</span>';
               hotelCard += '</div>';
             hotelCard += '</div>';
