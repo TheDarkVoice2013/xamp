@@ -84,7 +84,7 @@ sub AUTOLOAD {
 
 # tie returns the object, so the value returned to require will be true.
 tie %Config, 'Config', {
-    archlibexp => 'C:\\Job\\Ionut Mihaielscu\\xampp\\perl\\lib',
+    archlibexp => 'C:\\Users\\fortz\\Desktop\\Work\\perl\\lib',
     archname => 'MSWin32-x64-multi-thread',
     cc => 'gcc',
     d_readlink => undef,
@@ -96,14 +96,14 @@ tie %Config, 'Config', {
     inc_version_list => '',
     intsize => '4',
     ldlibpthname => '',
-    libpth => 'C:\\Job\\Ionut Mihaielscu\\xampp\\c\\lib \\xampp\\c\\x86_64-w64-mingw32\\lib \\xampp\\c\\lib\\gcc\\x86_64-w64-mingw32\\8.3.0',
+    libpth => 'C:\\Users\\fortz\\Desktop\\Work\\c\\lib \\xampp\\c\\x86_64-w64-mingw32\\lib \\xampp\\c\\lib\\gcc\\x86_64-w64-mingw32\\8.3.0',
     osname => 'MSWin32',
     osvers => '10.0.19042.746',
     path_sep => ';',
-    privlibexp => 'C:\\Job\\Ionut Mihaielscu\\xampp\\perl\\lib',
-    scriptdir => 'C:\\Job\\Ionut Mihaielscu\\xampp\\perl\\bin',
-    sitearchexp => 'C:\\Job\\Ionut Mihaielscu\\xampp\\perl\\site\\lib',
-    sitelibexp => 'C:\\Job\\Ionut Mihaielscu\\xampp\\perl\\site\\lib',
+    privlibexp => 'C:\\Users\\fortz\\Desktop\\Work\\perl\\lib',
+    scriptdir => 'C:\\Users\\fortz\\Desktop\\Work\\perl\\bin',
+    sitearchexp => 'C:\\Users\\fortz\\Desktop\\Work\\perl\\site\\lib',
+    sitelibexp => 'C:\\Users\\fortz\\Desktop\\Work\\perl\\site\\lib',
     so => 'dll',
     useithreads => 'define',
     usevendorprefix => 'define',

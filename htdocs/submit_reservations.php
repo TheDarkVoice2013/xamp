@@ -1,40 +1,38 @@
 <?php
 
 include "db_conn.php";
+session_start(); 
+$ret = new stdClass;
 
 $hotelId = $_POST['hotelId'];
 $startdate = $_POST['startdate'];
 $enddate = $_POST['enddate'];
+$roomtype = $_POST['roomtype'];
 $numberOfRooms = $_POST['numberofrooms'];
+$userId =$_SESSION['id'];
 
-echo $hotelId;
-return;
+$start_date = date('Y-m-d', strtotime($startdate));
+$end_date = date('Y-m-d', strtotime($enddate));
 
-$sql = "SELECT roomId FROM reservations WHERE hotel_id = '$hotelId' AND date >= '$startdate' AND date <= '$enddate' AND room_id NOT IN (SELECT room_id FROM reservations WHERE hotel_id = '$hotelId' AND start_date >= '$startdate' AND end_date <= '$enddate')";
-$result = $conn->query($sql);
-echo $result;
-return;
-if ($result->num_rows > 0) {
-  for ($i=0; $i<$numberOfRooms; $i++) {
-    $row = $result->fetch_assoc();
-    $roomId = $row['roomId'];
-    $sql = "INSERT INTO reservations (roomId, hotel_id, start_date, end_date) VALUES ('$roomId', '$hotelId', '$startdate', '$enddate')";
-    $conn->query($sql);
-  }
+$sql_room = "SELECT room_id FROM rooms WHERE hotel_id = '$hotelId' AND type = '$roomtype' LIMIT 1";
 
-  // Send a success response
-  echo json_encode([
-    'status' => 'success',
-    'message' => 'Reservations submitted successfully.'
-  ]);
+$result_room = $conn->query($sql_room);
+
+if ($result_room->num_rows > 0) {
+    $row = $result_room->fetch_assoc();
+    $room_id = $row['room_id'];
+
+    $sql1 = "INSERT INTO reservations (user_id, hotel_id, room_id, status, updated_at, start_date, end_date)
+             VALUES ('$userId', '$hotelId', '$room_id', 'PENDING', NOW(), '$start_date', '$end_date')";
+
+    // Execute the query
+    $conn->query($sql1);
 } else {
-  // Send an error response
-  echo json_encode([
-    'status' => 'error',
-    'message' => 'No available rooms found for the specified dates.'
-  ]);
+    $ret->ERR[] = "Error: No matching room found for the given hotel and room type.";
 }
 
 $conn->close();
+
+echo json_encode($ret);
 
 ?>

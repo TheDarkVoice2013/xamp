@@ -7,8 +7,7 @@ $endDate = $_POST['endDate'];
 $adults = $_POST['adults'];
 $kids = $_POST['kids'];
 
-$hotelsResults =$conn->query("
-  SELECT
+$hotelsResults =$conn->query("SELECT
   hotels.*
   FROM hotels
   JOIN rooms ON hotels.hotel_id = rooms.hotel_id

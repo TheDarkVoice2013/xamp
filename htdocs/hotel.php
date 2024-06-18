@@ -78,8 +78,8 @@ $hotelId = $_GET['hotelId'];
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
+                        <a class="collapse-item" href="home.php">Hotels</a>
+                        <a class="collapse-item" href="reservations.php">Reservations</a>
                     </div>
                 </div>
             </li>
@@ -544,115 +544,110 @@ form button {
 
     <script>
         $(document).ready(function() {
+    const hotelId = `<?php echo $_GET['hotelId'] ?>`;
+    $.ajax({
+        url: 'get_hotel_data.php',
+        method: 'POST',
+        data: {
+            hotelId: hotelId
+        },
+        success: function(response) {
+            const hotelData = JSON.parse(response);
 
-            const hotelId = `<?php echo $_GET['hotelId'] ?>`;
-        $.ajax({
-            url: 'get_hotel_data.php',
-            method: 'POST',
-            data: {
-                hotelId: hotelId
-            },
-    success: function(response) {
-      
-      const hotelData = JSON.parse(response);
-
-        const hotelName = hotelData[0].name;
-        const hotelImage = hotelData[0].imagepath;
-        const hotelDescription = hotelData[0].description;
-        const location = hotelData[0].location;
-        const hotelId = hotelData[0].hotel_id;
-        $('#hotel_page').append(`
-            <div class="hotel-title">
-            <h1>${hotelName}</h1>
-            </div>
-            <div class="hotel-image-container">
-            <img src="${hotelImage}" alt="Hotel Image">
-            </div>
-
-            <div class="hotel-details">
-            <h2>Description</h2>
-            <p>${hotelDescription}</p>
-            <p>Location: ${location}</p>
-            <dialog class="main-dialog">
-                            <h2>Make Reservation</h2>
-                            <form method="dialog">
+            const hotelName = hotelData[0].name;
+            const hotelImage = hotelData[0].imagepath;
+            const hotelDescription = hotelData[0].description;
+            const location = hotelData[0].location;
+            $('#hotel_page').append(`
+                <div class="hotel-title">
+                    <h1>${hotelName}</h1>
+                </div>
+                <div class="hotel-image-container">
+                    <img src="${hotelImage}" alt="Hotel Image">
+                </div>
+                <div class="hotel-details">
+                    <h2>Description</h2>
+                    <p>${hotelDescription}</p>
+                    <p>Location: ${location}</p>
+                    <dialog class="main-dialog">
+                        <h2>Make Reservation</h2>
+                        <form method="dialog">
                             <div class="date-filter">
-                            <label for="startDate">Start Date: </label>
-                            <input type="date" id="startdate" name="startDate" placeholder="Start Date" required>
-                            <label for="endDate">End Date:</label>
-                            <input type="date" name="endDate" id="enddate" placeholder="End Date" required>
-                            <label for="roomType">Room Type:</label>
-                            <select id="roomType" name="roomType" id="roomtype">
-                                <option value="Normal">Normal</option>
-                                <option value="Double">Double</option>
-                                <option value="VIP">VIP</option>
-                            </select>
-                            <label for="numberofrooms" >Number of Rooms:</label>
-                            <input type="number" name="numberofrooms" id="numberofrooms" placeholder="Number of Rooms" required>
+                                <label for="startDate">Start Date: </label>
+                                <input type="date" id="startdate" name="startDate" placeholder="Start Date" required>
+                                <label for="endDate">End Date:</label>
+                                <input type="date" name="endDate" id="enddate" placeholder="End Date" required>
+                                <label for="roomType">Room Type:</label>
+                                <select id="roomType" name="roomType">
+                                    <option value="Normal">Normal</option>
+                                    <option value="Double">Double</option>
+                                    <option value="VIP">VIP</option>
+                                </select>
+                                <label for="numberofrooms">Number of Rooms:</label>
+                                <input type="number" name="numberofrooms" id="numberofrooms" placeholder="Number of Rooms" required>
                             </div>
-                                <button type="button" onClick="submit_reservation(${hotelId})">OK</button>
-                            </form>
-                            </dialog>
-            <button class="reservation-button" onClick="makereservation(${hotelId})">Make a Reservation</button>
-            </div>
-        `       );
+                            <button type="button" class="submit-button" data-hotel-id="${hotelId}">OK</button>
+                        </form>
+                    </dialog>
+                    <button class="reservation-button" data-hotel-id="${hotelId}">Make a Reservation</button>
+                </div>
+            `);
             
-            } 
-        })
-    })
-    function makereservation(hotelId){
-        
-            const dialog = document.querySelector("dialog");
-            const showButton = document.querySelector("dialog + button");
-            const closeButton = document.querySelector("dialog button");
-
-
-
-            showButton.addEventListener("click", () => {
-            dialog.showModal();
-            });
-
-            closeButton.addEventListener("click", () => {
-            dialog.close();
-            });
-    }
-
-    function submit_reservation(hotelId){
-
-        const startdate = document.getElementById('startdate').value;
-        const enddate = document.getElementById('enddate').value;
-        const roomtype = document.getElementById('roomType').value;
-        const numberofrooms = document.getElementById('numberofrooms').value;
-        
-        $.ajax({
-                url: 'submit_reservations.php',
-                data: {
-                    hotelId: hotelId,
-                    startdate: startdate,
-                    enddate: enddate,
-                    roomtype: roomType,
-                    numberofrooms: numberofrooms
-                },
-                method: 'POST',
-      success: function(response) {
-        console.log(response)
-      },
-      error: function(error) {
-        console.error('AJAX error:', error);
-      }
+            // Bind event listeners
+            bindEventListeners();
+        }
     });
 
+    function bindEventListeners() {
+        // Show dialog when reservation button is clicked
+        $('.reservation-button').on('click', function() {
+            const dialog = document.querySelector("dialog");
+            dialog.showModal();
+        });
+
+        // Submit reservation
+        $('.submit-button').on('click', function() {
+            const hotelId = $(this).data('hotel-id');
+            submit_reservation(hotelId);
+        });
+
+        // Close dialog when the close button is clicked
+        $('dialog button[type="button"]').on('click', function() {
+            const dialog = document.querySelector("dialog");
+            dialog.close();
+        });
     }
 
+    function submit_reservation(hotelId) {
+        const startdate = $('#startdate').val();
+        const enddate = $('#enddate').val();
+        const roomtype = $('#roomType').val();
+        const numberofrooms = $('#numberofrooms').val();
 
-    $(function() {
-  $('input[name="daterange"]').daterangepicker({
-    opens: 'left'
-  }, function(start, end, label) {
-    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-  });
+        $.ajax({
+            url: 'submit_reservations.php',
+            data: {
+                hotelId: hotelId,
+                startdate: startdate,
+                enddate: enddate,
+                roomtype: roomtype,
+                numberofrooms: numberofrooms
+            },
+            method: 'POST',
+            success: function(response) {
+                response = JSON.parse(response);
+                if (response.ERR && Array.isArray(response.ERR) && response.ERR.length > 0) {
+                    alert(response.ERR);
+                }
+                const dialog = document.querySelector("dialog");
+                dialog.close();
+            },
+            error: function(error) {
+                console.error('AJAX error:', error);
+            }
+        });
+    }
 });
-
     </script>
 
 </body>

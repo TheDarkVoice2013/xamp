@@ -1,5 +1,5 @@
 #!perl
-    eval 'exec C:\Job\Ionut Mihaielscu\xampp\perl\bin\perl.exe -S $0 ${1+"$@"}'
+    eval 'exec C:\Users\fortz\Desktop\Work\perl\bin\perl.exe -S $0 ${1+"$@"}'
 	if $running_under_some_shell;
 
 # pod2latex conversion program

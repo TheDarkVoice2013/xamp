@@ -81,6 +81,6 @@ echo _gettext("Close");
 
     public function getSourceContext()
     {
-        return new Source("", "modals/enum_set_editor.twig", "F:\\xampp\\phpMyAdmin\\templates\\modals\\enum_set_editor.twig");
+        return new Source("", "modals/enum_set_editor.twig", "C:\\Users\\fortz\\Desktop\\Work\\phpMyAdmin\\templates\\modals\\enum_set_editor.twig");
     }
 }
